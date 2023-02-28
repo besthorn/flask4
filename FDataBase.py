@@ -28,6 +28,11 @@ class FDataBase:
                 print("Статья с таким url уже существует")
                 return False
 
+            base = url_for('static', filename='images_html')
+            text = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
+                          "\\g<tag>" + base + "/\\g<url>>",
+                          text)
+
             tm = math.floor(time.time())
             self.__cur.execute("INSERT INTO posts VALUES(NULL, ?, ?, ?, ?)", (title, text, url, tm))
             self.__db.commit()
